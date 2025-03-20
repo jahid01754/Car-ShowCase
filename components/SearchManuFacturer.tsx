@@ -1,5 +1,6 @@
 "use client";
 import { SearchManufacturerProps } from "@/types";
+import { manufacturers } from "@/constants";
 import { Combobox, Transition } from "@headlessui/react";
 import { useState, Fragment } from "react";
 import Image from "next/image";
@@ -11,9 +12,19 @@ const SearchManufacturer = ({
 }: SearchManufacturerProps) => {
   const [query, setQuery] = useState("");
 
+  const filteredManufacturers =
+    query === ""
+      ? manufacturers
+      : manufacturers.filter((item) =>
+          item
+            .toLowerCase()
+            .replace(/\s+/g, "")
+            .includes(query.toLowerCase().replace(/\s+/g, ""))
+        );
+
   return (
     <div className="flex-1 max-sm:w-full flex justify-start items-center">
-      <Combobox>
+      <Combobox value={manufacturer} onChange={setManufacturer}>
         <div className="relative w-full">
           <Combobox.Button className={`absolute top-[14px]`}>
             <Image
@@ -37,7 +48,40 @@ const SearchManufacturer = ({
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
-          ></Transition>
+            afterLeave={() => setQuery("")}
+          >
+            <Combobox.Options>
+              {filteredManufacturers.map((item) => (
+                <Combobox.Option
+                  key={item}
+                  value={item}
+                  className={({ active }) => `
+                    relative cursor-default select-none py-2 pl-10 pr-4
+                    ${active ? "bg-blue-500 text-white" : "text-gray-900"}
+                  `}
+                >
+                  {({ selected, active }) => (
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? "font-medium" : "font-normal"
+                        }`}
+                      >
+                        {item}
+                      </span>
+                      {selected ? (
+                        <span
+                          className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                            active ? "text-white" : "text-teal-600"
+                          }`}
+                        ></span>
+                      ) : null}
+                    </>
+                  )}
+                </Combobox.Option>
+              ))}
+            </Combobox.Options>
+          </Transition>
         </div>
       </Combobox>
     </div>
