@@ -4,6 +4,7 @@ export async function fetchCars() {
   };
   const response = await fetch(
     "https://api.api-ninjas.com/v1/cars?model=" + "camry",
+
     {
       headers: headers,
     }

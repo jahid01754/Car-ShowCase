@@ -4,6 +4,7 @@ import Image from "next/image";
 
 export default async function Home() {
   const allCars = await fetchCars();
+  console.log(allCars);
 
   const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
 
@@ -43,6 +44,3 @@ export default async function Home() {
     </main>
   );
 }
-
-// mt-12 w-full flex-between items-center flex-wrap gap-5
-// flex justify-start flex-wrap items-center gap-2
